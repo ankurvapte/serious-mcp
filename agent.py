@@ -9,14 +9,6 @@ from mcp.client.stdio import stdio_client
 from mcp import ClientSession
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-activatedllm = "gemini"  # or "openai"
-
-openaillm = ChatOpenAI(
-    model="gpt-4o", 
-    temperature=0,
-    openai_api_key=os.getenv("OPENAIAPIKEY")
-)
-
 geminillm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash-lite", 
     temperature=0,
@@ -42,15 +34,11 @@ async def main():
             # 5. Create the Agentic Graph
             # The 'create_react_agent' manages the loop: 
             # Thought -> Call Tool -> Observe Result -> Final Answer
-            if activatedllm == "openai":
-                llm = openaillm
-            elif activatedllm == "gemini":
-                llm = geminillm
 
-            agent = create_agent(model=llm, tools=tools)
+            agent = create_agent(model=geminillm, tools=tools)
             
             # 6. Test the Agent
-            query = "Check the database: who are the users and what are their roles?"
+            query = "Check the database: Delete the sample_db database."
             print(f"User: {query}\n")
             
             result = await agent.ainvoke({"messages": [("user", query)]})
